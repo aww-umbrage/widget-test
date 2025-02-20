@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "global_styles",
+  "info": {
+    "singularName": "global-style",
+    "pluralName": "global-styles",
+    "displayName": "Global Styles",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "partner": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::author.author",
+      "inversedBy": "global_style"
+    }
+  }
+}

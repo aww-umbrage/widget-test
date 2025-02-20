@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Testing the WP Web Component</title>
+
+    <base href="/" />
+  </head>
+  <body>
+    <style>
+      .bank-divider {
+        width: 100%;
+        background-color: black; /* Blue color */
+        color: white;
+        text-align: center;
+        padding: 15px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+
+      .center {
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://d14crhm4r467bw.cloudfront.net/global_styles_04dc81a328.css "
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://d14crhm4r467bw.cloudfront.net/city_bank_0b96592491.css"
+    />
+
+    <div class="bank-divider">Bank Website</div>
+    <wp-widget bank="ag7rkfcxdwgv69y26c34v7vj"></wp-widget>
+    <div class="bank-divider">Intro Component</div>
+    <wp-intro bank="va70cg8gkmyx6cfqvum7g8x2"></wp-intro>
+    <div class="bank-divider">Benefits Component</div>
+    <div class="center">
+      <wp-benefits></wp-benefits>
+    </div>
+    <div class="bank-divider">Contact Component</div>
+    <wp-contact></wp-contact>
+    <div class="bank-divider">Call to Actions Component</div>
+    <div class="center">
+      <wp-cta bank="ag7rkfcxdwgv69y26c34v7vj"></wp-cta>
+    </div>
+    <div class="bank-divider">Bank Footer</div>
+
+    <script type="text/javascript" src="wp-widget.js" defer></script>
+  </body>
+</html>
