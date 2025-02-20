@@ -10,7 +10,7 @@ This project integrates **Strapi CMS**, **Angular Web Components**, and **Web Co
 
 Once the Angular code is unzipped, install dependencies:
 
-- run at root folder
+#### Run at root folder
 
 ```sh
 npm install
@@ -18,7 +18,7 @@ npm install
 
 To start the **WP Hosted Components** server:
 
-- run at root folder
+#### Run at root folder
 
 ```sh
 npm start
@@ -70,7 +70,7 @@ npm run develop
 
 📍 **Strapi will be available at** `http://localhost:1337`
 
-## 📌 **2. Adding CTAs with Roles & Responsibilities**
+## 📌 **2. Adding CTAs**
 
 CTAs (Call to Actions) can be added as **custom content types** in Strapi.
 
@@ -81,40 +81,45 @@ CTAs (Call to Actions) can be added as **custom content types** in Strapi.
 3. **Enter Name:** `cta`.
 4. **Add Fields:**
 
-   - **Title** (`Short text`)
-   - **Description** (`Rich text`)
-   - **Button Text** (`Short text`)
-   - **URL** (`Text`)
-   - **Roles (Relation to User role model)**
+   - **title** (`Short text`)
+   - **description** (`Rich text`)
+   - **image** (`Media`)
+   - **url** (`Text`)
+   - **partner (One to One Relation to author / partner collection type)**
+
+## 📌 **3. Adding Global Styles**
+
+Global Styles can be added as **custom content types** in Strapi.
+
+The intention behind this is to add CDN (Content Delivery Network) functionality to serve css specific to partners.
+
+This collection type will be consumed on the frontend along with the simple javascript to add global styles and partner specific styles to each component.
+
+### **Steps to Create a Global Style Collection Type**
+
+1. **Navigate to the Strapi Admin Panel (`localhost:1337/admin`).**
+2. **Go to "Content-Type Builder" → "Create new Collection Type".**
+3. **Enter Name:** `Global Styles`.
+4. **Add Fields:**
+
+   - **title** (`Short text`)
+   - **file** (`Single Media` --> choose Advanced Settings and select only File type)
+   - **partner (One to One Relation to author / partner collection type)**
 
 5. **Save & Restart the Server.**
 
-Now, CTAs can be assigned based on user roles, ensuring different users have different CTA options.
+   - Click save at top right
 
----
+> If you have not already setup AWS S3 / Cloudfront (or another file storage / CDN), wait to add style content until after that. [AWS S3 Section](#aws-s3-and-cloudfront-setup)
 
-## 📌 **3. Creating Content in Strapi**
-
-1. **Navigate to "Content Manager".**
-2. Select **"CTA"**, **"Pages"**, or any custom content type.
-3. Click **"Create New Entry"**.
-4. Fill in the required fields (title, description, etc.).
-5. Click **"Publish"** or **"Save as Draft"**.
-
-💡 **Note**: Published content will be available via the **Strapi API**.
-
----
-
-## 📌 **4. Renaming Authors to Partners**
+## 📌 4. Renaming Authors to Partners
 
 By default, Strapi includes "Authors" as part of the **Article** content type. To rename:
 
-1. **Go to Content-Type Builder** → **Select "User"**.
-2. Locate the field `author` and **rename it to "partner"`**.
-3. Save changes and restart the server.
-4. Update related API endpoints in the frontend (if necessary).
-
----
+1. **Go to Content-Type Builder** → **Select "Author"**.
+2. Locate the edit button and click
+3. Change `Author` and **rename it to "Partner"`**.
+4. Save changes and restart the server (server will automatically restart on save).
 
 ## 📌 **5. Renaming Articles to Pages**
 
@@ -123,15 +128,38 @@ Strapi’s default "Articles" model can be renamed to "Pages" to better reflect 
 ### **Steps to Rename:**
 
 1. **Go to Content-Type Builder** → Select **Articles**.
-2. Rename the collection **"Articles" → "Pages"**.
-3. Rename **"articleTitle" → "pageTitle"**, etc.
-4. Save and restart the Strapi server.
+2. Rename the collection **"Articles" → "Pages"** by clicking edit in the top left.
+3. Save
 
-📍 **API requests will now reference `/pages` instead of `/articles`.**
+## 📌 **6. Creating Content in Strapi**
 
----
+1. **Navigate to "Content Manager".**
+2. Select **"CTA"**, **"Pages"**, or any custom content type (i.e. **"Global Styles"**).
+3. Click **"Create New Entry"**.
+4. Fill in the required fields (title, description, etc.).
+5. Click **"Publish"** or **"Save as Draft"**.
 
-## 📌 **6. Using Strapi as an API (JSON-Driven CMS)**
+### 💡 **Note** about Global Styles
+
+Global Styles can be linked as a style ref in the widget/index.html file.
+
+When creating Global Styles,
+
+1. Create a base style i.e. global-styles.css
+2. Add all of the necessary component pieces i.e.
+
+```css
+.benefits-card {
+  background-color: white;
+}
+/* ... */
+```
+
+3. Partner specific css can also be linked in the widget/index.html file but should come after global-styles.css
+
+💡 **Note**: Currently local styles are in the folder `styles/`
+
+## 📌 **7. Using Strapi as an API (JSON-Driven CMS)**
 
 Strapi provides a **REST API & GraphQL API** for retrieving JSON-based content.
 
@@ -139,7 +167,7 @@ Strapi provides a **REST API & GraphQL API** for retrieving JSON-based content.
 
 1. **Go to Settings → Roles & Permissions.**
 2. Select **"Public"**.
-3. Grant **Read Access** to content types like **Pages, CTAs, Partners**.
+3. Grant **Read Access** to content types like **Pages, CTAs, Partners, Global Styles**.
 4. Save and restart the server.
 
 ### **Fetching JSON Data**
@@ -147,13 +175,13 @@ Strapi provides a **REST API & GraphQL API** for retrieving JSON-based content.
 Example request using **cURL**:
 
 ```sh
-curl -X GET http://localhost:1337/api/pages
+curl -X GET http://localhost:1337/api/articles
 ```
 
 Example request using **JavaScript (Fetch API)**:
 
 ```javascript
-fetch("http://localhost:1337/api/pages")
+fetch("http://localhost:1337/api/articles")
   .then((response) => response.json())
   .then((data) => console.log(data));
 ```
@@ -173,10 +201,112 @@ To ensure different **partners see different content**, we can **filter API resp
 Example API request for **Pages assigned to a specific Partner**:
 
 ```sh
-curl -X GET "http://localhost:1337/api/pages?filters[partner][id][$eq]=1"
+curl -X GET "http://localhost:1337/api/articles?filters[partner][id][$eq]=1"
 ```
 
 This setup ensures each partner only sees their assigned content.
+
+# AWS S3 and Cloudfront Setup
+
+**To set up Strapi with AWS S3 for media uploads + style (css files etc), follow these steps**
+
+### Follow all steps outlined in the following
+
+#### Start at Set Up AWS S3 and CloudFront and end at Integrating S3 and CloudFront with Strapi
+
+https://strapi.io/blog/request-strapi-s-rest-api-behind-a-content-delivery-network-cdn
+
+### **(If AWS S3 and Cloudfront are already setup) Install the AWS S3 Upload Provider Plugin**
+
+In your Strapi project directory, install the plugin:
+
+`npm install @strapi/provider-upload-aws-s3`
+
+### Configure the Plugin
+
+Create or edit the config/plugins.js file in your Strapi project:
+
+```typescript
+export default ({ env }: { env: (key: string) => string }) => ({
+  upload: {
+    config: {
+      provider: "aws-s3",
+      providerOptions: {
+        baseUrl: env("CDN_URL"),
+        rootPath: "",
+        s3Options: {
+          credentials: {
+            accessKeyId: env("AWS_KEY_ID"),
+            secretAccessKey: env("AWS_SECRET"),
+          },
+          region: env("AWS_REGION"),
+          params: {
+            Bucket: env("AWS_BUCKET"),
+          },
+        },
+      },
+      actionOptions: {
+        upload: {},
+        uploadStream: {},
+        delete: {},
+      },
+    },
+  },
+});
+```
+
+#### Ensure your .env file contains the necessary AWS credentials:
+
+```
+AWS_ACCESS_KEY_ID=your_access_key_id
+AWS_ACCESS_SECRET=your_secret_access_key
+AWS_REGION=your_aws_region
+AWS_BUCKET=your_bucket_name
+```
+
+### (Optional) Adjust Security Middleware
+
+To properly display media thumbnails in the Strapi admin panel, modify the config/middlewares.js file:
+
+```javascript
+module.exports = ({ env }) => [
+  "strapi::errors",
+  {
+    name: "strapi::security",
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          "connect-src": ["'self'", "https:"],
+          "img-src": ["'self'", "data:", "blob:", "dl.airtable.com", `https://${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com/`, env("CDN_URL")],
+          "media-src": ["'self'", "data:", "blob:", "dl.airtable.com", `https://${env("AWS_BUCKET")}.s3.${env("AWS_REGION")}.amazonaws.com/`, env("CDN_URL")],
+          upgradeInsecureRequests: null,
+        },
+      },
+    },
+  },
+  "strapi::cors",
+  "strapi::poweredBy",
+  "strapi::logger",
+  "strapi::query",
+  "strapi::body",
+  "strapi::session",
+  "strapi::favicon",
+  "strapi::public",
+];
+```
+
+Replace `yourBucketName.s3.yourRegion.amazonaws.com` with your actual S3 bucket URL.
+
+### Restart Strapi
+
+After configuration, restart your Strapi server:
+
+`npm run develop`
+
+Your Strapi application should now use AWS S3 for media file storage.
+
+For more detailed information, refer to the Strapi documentation.
 
 ---
 
@@ -251,8 +381,8 @@ createApplication(appConfig)
 
 - **WP (localhost:4200)** → Hosts the API & Components.
 - **Client (localhost:3000)** → Consumes the API & uses:
-  - **Holistic Web Components**
-  - **Individual Web Components**
+  - **Holistic Web Components** (i.e. wp-widget)
+  - **Individual Web Components** (i.e. wp-benefits)
 
 ### **🔹 Strapi CMS Integration**
 
