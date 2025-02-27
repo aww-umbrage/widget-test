@@ -67,6 +67,8 @@ npx create-strapi@latest strapi-test
 Then, start the Strapi server at the root folder:
 
 ```sh
+cd to strapi-test
+npm install
 npm run develop
 ```
 
