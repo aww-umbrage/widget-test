@@ -1,4 +1,4 @@
-# WP Hosted Components & Strapi Integration
+# Custom Hosted Components & Strapi Integration
 
 This project integrates **Strapi CMS**, **Angular Web Components**, and **Web Components (Widgets)** into a structured system for API-driven content management and frontend consumption.
 
@@ -16,7 +16,7 @@ Once the Angular code is unzipped, install dependencies:
 npm install
 ```
 
-To start the **WP Hosted Components** server:
+To start the **Custom Hosted Components** server:
 
 #### Run at root folder
 
@@ -24,7 +24,7 @@ To start the **WP Hosted Components** server:
 npm start
 ```
 
-📍 **WP Hosted Components will be running at** `http://localhost:4200`
+📍 **Custom Hosted Components will be running at** `http://localhost:4200`
 
 ---
 
@@ -314,13 +314,13 @@ For more detailed information, refer to the Strapi documentation.
 
 ### **1. Building & Publishing Web Components**
 
-After making changes in the WP Hosted Components (`src` folder), run:
+After making changes in the Custom Hosted Components (`src` folder), run:
 
 ```sh
 npm run build:component
 ```
 
-This command updates the `widget` folder with the latest **wp-widget** component.
+This command updates the `widget` folder with the latest **cm-widget** component.
 
 ### **2. Component Definitions**
 
@@ -344,11 +344,11 @@ createApplication(appConfig)
     const WPContact = createCustomElement(ContactComponent, { injector: app.injector });
     const WPCTA = createCustomElement(CtasComponent, { injector: app.injector });
 
-    customElements.define("wp-widget", WPWidget);
-    customElements.define("wp-intro", WPIntro);
-    customElements.define("wp-benefits", WPBenefits);
-    customElements.define("wp-contact", WPContact);
-    customElements.define("wp-cta", WPCTA);
+    customElements.define("cm-widget", WPWidget);
+    customElements.define("cm-intro", WPIntro);
+    customElements.define("cm-benefits", WPBenefits);
+    customElements.define("cm-contact", WPContact);
+    customElements.define("cm-cta", WPCTA);
   })
   .catch((err) => console.error(err));
 ```
@@ -357,14 +357,14 @@ createApplication(appConfig)
 
 ## 🏛 **Project Structure**
 
-### **1. WP Hosted Client (`localhost:4200`)**
+### **1. Custom Hosted Client (`localhost:4200`)**
 
 - **Hosts the Angular Web Components**.
 - **Builds and publishes updates** via `npm run build:component`.
 
 ### **2. Partner Hosted Client (`localhost:3000`)**
 
-- **Consumes Web Components** (`wp-widget` and other individual components).
+- **Consumes Web Components** (`cm-widget` and other individual components).
 - Uses **Strapi-powered JSON APIs** to populate dynamic content.
 
 ### **3. Strapi CMS (`localhost:1337`)**
@@ -379,10 +379,10 @@ createApplication(appConfig)
 
 ### **🔹 API Hosting & Consumption**
 
-- **WP (localhost:4200)** → Hosts the API & Components.
+- **Custom (localhost:4200)** → Hosts the API & Components.
 - **Client (localhost:3000)** → Consumes the API & uses:
-  - **Holistic Web Components** (i.e. wp-widget)
-  - **Individual Web Components** (i.e. wp-benefits)
+  - **Holistic Web Components** (i.e. cm-widget)
+  - **Individual Web Components** (i.e. cm-benefits)
 
 ### **🔹 Strapi CMS Integration**
 

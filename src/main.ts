@@ -31,10 +31,10 @@ createApplication(appConfig)
     const WPCTA = createCustomElement(CtasComponent, {
       injector: app.injector,
     });
-    customElements.define('wp-widget', WPWidget);
-    customElements.define('wp-intro', WPIntro);
-    customElements.define('wp-benefits', WPBenefits);
-    customElements.define('wp-contact', WPContact);
-    customElements.define('wp-cta', WPCTA);
+    customElements.define('cm-widget', WPWidget);
+    customElements.define('cm-intro', WPIntro);
+    customElements.define('cm-benefits', WPBenefits);
+    customElements.define('cm-contact', WPContact);
+    customElements.define('cm-cta', WPCTA);
   })
   .catch((err) => console.error(err));
