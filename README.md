@@ -13,6 +13,8 @@ Once the Angular code is unzipped, install dependencies:
 #### Run at root folder
 
 ```sh
+nvm install --lts
+nvm use --lts
 npm install
 ```
 
