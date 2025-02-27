@@ -324,7 +324,7 @@ This command updates the `widget` folder with the latest **wp-widget** component
 
 ### **2. Component Definitions**
 
-This project defines the following Angular components in src/main.ts as **Custom Elements**:
+This project defines the following Angular components in `src/main.ts` as **Custom Elements**:
 
 ```typescript
 import { createCustomElement } from "@angular/elements";
