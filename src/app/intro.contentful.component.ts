@@ -3,19 +3,11 @@ import { Component, input, linkedSignal } from '@angular/core';
 import { ContentfulClientApi, createClient } from 'contentful';
 import { catchError, from, map, Observable, of, switchMap } from 'rxjs';
 import { environment } from '../environments';
+import { Entry } from './entitiy.contentful';
 
 interface Merchant {
   name: string;
   avatar: any;
-}
-
-interface Entry<T> {
-  id: number;
-  attributes: T;
-}
-
-interface Response {
-  data: Entry<Merchant>;
 }
 
 @Component({
@@ -115,7 +107,7 @@ export class IntroContentfulComponent {
   ngOnInit(): void {
     console.log('bank', this._bank());
     this.merchant$ = from(
-      this.client.getEntry<any>(this.bank() as string, {})
+      this.client.getEntry<Entry<Merchant>>(this.bank() as string, {})
     ).pipe(
       switchMap((entry) => {
         const imageId = (entry.fields as any).image?.sys?.id;

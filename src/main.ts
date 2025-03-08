@@ -14,6 +14,7 @@ import { BenefitsComponent } from './app/benefits.component';
 import { BenefitsContentfulComponent } from './app/benefits.contentful.component';
 import { ContactComponent } from './app/contact.component';
 import { CtasComponent } from './app/cta.component';
+import { CtasContentfulComponent } from './app/cta.contentful.component';
 import { IntroComponent } from './app/intro.component';
 import { IntroContentfulComponent } from './app/intro.contentful.component';
 
@@ -47,10 +48,14 @@ createApplication(appConfig)
         injector: app.injector,
       }
     );
+    const WPContentfulCTA = createCustomElement(CtasContentfulComponent, {
+      injector: app.injector,
+    });
 
     customElements.define('cm-contentful-widget', WPContentfulWidget);
     customElements.define('cm-contentful-intro', WPContentfulIntro);
     customElements.define('cm-contentful-benefits', WPContentfulBenefits);
+    customElements.define('cm-contentful-cta', WPContentfulCTA);
 
     customElements.define('cm-widget', WPWidget);
     customElements.define('cm-intro', WPIntro);

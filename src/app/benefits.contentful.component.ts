@@ -3,20 +3,12 @@ import { Component } from '@angular/core';
 import { ContentfulClientApi, createClient, EntryCollection } from 'contentful';
 import { from, Observable } from 'rxjs';
 import { environment } from '../environments';
+import { Entry } from './entitiy.contentful';
 
 interface Benefit {
-  title: string;
+  name: string;
   description: string;
-  cover: any;
-}
-
-interface Entry<T> {
-  id: number;
-  attributes: T;
-}
-
-interface Response {
-  data: Entry<Benefit>[];
+  image: any;
 }
 
 @Component({
@@ -112,7 +104,7 @@ export class BenefitsContentfulComponent {
   ngOnInit(): void {
     this.benefits$ = from(
       this.client
-        .getEntries<any>(
+        .getEntries<Entry<Benefit>>(
           Object.assign(
             {
               content_type: 'benefits',
@@ -120,10 +112,12 @@ export class BenefitsContentfulComponent {
             {}
           )
         )
-        .then((response: EntryCollection<any, undefined, string>) => {
-          console.log('response.items', response.items);
-          return response.items;
-        })
+        .then(
+          (response: EntryCollection<Entry<Benefit>, undefined, string>) => {
+            console.log('response.items', response.items);
+            return response.items;
+          }
+        )
     );
   }
 }

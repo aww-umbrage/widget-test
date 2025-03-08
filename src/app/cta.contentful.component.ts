@@ -1,21 +1,14 @@
 import { AsyncPipe } from '@angular/common';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component, input, linkedSignal } from '@angular/core';
-import { catchError, map, Observable, of } from 'rxjs';
+import { ContentfulClientApi, createClient, EntryCollection } from 'contentful';
+import { from, Observable } from 'rxjs';
+import { environment } from '../environments';
+import { Entry } from './entitiy.contentful';
 
 interface Cta {
   title: string;
   description: string;
   cover: any;
-}
-
-interface Entry<T> {
-  id: number;
-  attributes: T;
-}
-
-interface Response {
-  data: Entry<Cta>[];
 }
 
 @Component({
@@ -83,11 +76,11 @@ interface Response {
 
     <h2>Call to Actions</h2>
     @if(ctas$ | async; as ctas) { @for(cta of ctas; track cta.id; let i =
-    $index; let isOdd = $odd; let isEven = $even) {
+    $index; let isOdd = $odd; let isEven = $even;) {
     <div class="ctas-container" [class.flip]="isEven">
       <div class="cta-left">
-        <h2>{{ cta.title }}</h2>
-        <p>{{ cta.description }}</p>
+        <h2>{{ cta.fields.headline }}</h2>
+        <p>{{ cta.fields.ctaText }}</p>
         <button>CTA {{ i + 1 }}</button>
       </div>
       <div class="cta-right">
@@ -102,21 +95,30 @@ export class CtasContentfulComponent {
   _bank = linkedSignal(() => this.bank());
   error: any | undefined;
   ctas$: Observable<any> | undefined;
-  constructor(private http: HttpClient) {}
-  ngOnInit(): void {
-    const url = `http://localhost:1337/api/authors/${this._bank()}`;
-    const opts = { params: { populate: '*' } };
-
-    this.ctas$ = this.http.get<Response>(url, opts).pipe(
-      catchError((error) => this.handleError(error)),
-      map((response) => {
-        return (response.data as any).ctas;
-      })
-    );
+  client: ContentfulClientApi<undefined>;
+  constructor() {
+    this.client = createClient({
+      space: environment.contentful.spaceId,
+      accessToken: environment.contentful.accessToken,
+      environment: environment.contentful.environment,
+    });
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    this.error = error;
-    return of();
+  ngOnInit(): void {
+    this.ctas$ = from(
+      this.client
+        .getEntries<Entry<Cta>>(
+          Object.assign(
+            {
+              content_type: 'componentCta',
+            },
+            {}
+          )
+        )
+        .then((response: EntryCollection<Entry<Cta>, undefined, string>) => {
+          console.log('response.items', response.items);
+          return response.items;
+        })
+    );
   }
 }
