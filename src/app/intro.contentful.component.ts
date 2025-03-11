@@ -82,7 +82,9 @@ interface Merchant {
     <div class="intro-container">
       @if(topSection$ | async; as partner) {
       <div class="intro-text">
-        <h1 class="intro-heading">Welcome to {{ partner.headline }}</h1>
+        <h1 class="intro-heading" [style]="{ color: partner.test }">
+          Welcome to {{ partner.headline }}
+        </h1>
         <div class="intro-buttons">
           <button class="intro-button primary">Apply</button>
           <button class="intro-button secondary">Watch demos</button>

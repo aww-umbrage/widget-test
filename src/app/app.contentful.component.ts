@@ -1,3 +1,4 @@
+import { NgFor, NgIf } from '@angular/common';
 import { Component, input, linkedSignal, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ContentfulClientApi, createClient } from 'contentful';
@@ -19,6 +20,7 @@ interface Partner {
   body2: JSON[];
   extraSection: JSON[];
   avatar: any;
+  order: string[];
 }
 
 @Component({
@@ -29,6 +31,8 @@ interface Partner {
     CtasContentfulComponent,
     BenefitsContentfulComponent,
     IntroContentfulComponent,
+    NgFor,
+    NgIf,
   ],
   templateUrl: './app.contentful.component.html',
 })

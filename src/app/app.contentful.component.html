@@ -269,18 +269,30 @@
           ></path>
         </svg>
       </div>
-      <app-intro-contentful
-        [bank]="_bank()"
-        [topSection]="partner()?.topSection"
-      ></app-intro-contentful>
-      <h2>Benefits</h2>
-      <app-benefits-contentful
-        [benefits]="partner()?.extraSection"
-      ></app-benefits-contentful>
-      <app-ctas-contentful
-        [bank]="_bank()"
-        [ctaContent]="partner()?.body2"
-      ></app-ctas-contentful>
+      <div *ngIf="partner() as partnerData">
+        <ng-container *ngFor="let section of partnerData.order">
+          <!-- Intro Section -->
+          <app-intro-contentful
+            *ngIf="section === 'topSection'"
+            [bank]="_bank()"
+            [topSection]="partnerData.topSection"
+          ></app-intro-contentful>
+
+          <!-- Benefits Section -->
+          <h2 *ngIf="section === 'extraSection'">Benefits</h2>
+          <app-benefits-contentful
+            *ngIf="section === 'extraSection'"
+            [benefits]="partnerData.extraSection"
+          ></app-benefits-contentful>
+
+          <!-- CTA Section -->
+          <app-ctas-contentful
+            *ngIf="section === 'body2'"
+            [bank]="_bank()"
+            [ctaContent]="partnerData.body2"
+          ></app-ctas-contentful>
+        </ng-container>
+      </div>
       <app-contact></app-contact>
     </div>
   </div>
