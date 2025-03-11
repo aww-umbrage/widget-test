@@ -269,10 +269,16 @@
           ></path>
         </svg>
       </div>
-      <app-intro-contentful [bank]="_bank()"></app-intro-contentful>
+      <app-intro-contentful
+        [bank]="_bank()"
+        [topSection]="partner()?.topSection"
+      ></app-intro-contentful>
       <h2>Benefits</h2>
       <app-benefits-contentful></app-benefits-contentful>
-      <app-ctas-contentful [bank]="_bank()"></app-ctas-contentful>
+      <app-ctas-contentful
+        [bank]="_bank()"
+        [ctaContent]="partner()?.body2"
+      ></app-ctas-contentful>
       <app-contact></app-contact>
     </div>
   </div>

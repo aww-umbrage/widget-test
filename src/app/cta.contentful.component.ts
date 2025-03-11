@@ -1,7 +1,13 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, input, linkedSignal } from '@angular/core';
+import {
+  Component,
+  Input,
+  input,
+  linkedSignal,
+  OnChanges,
+} from '@angular/core';
 import { ContentfulClientApi, createClient, EntryCollection } from 'contentful';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { environment } from '../environments';
 import { Entry } from './entitiy.contentful';
 
@@ -75,7 +81,7 @@ interface Cta {
     </style>
 
     <h2>Call to Actions</h2>
-    @if(ctas$ | async; as ctas) { @for(cta of ctas; track cta.id; let i =
+    @if(ctaContent$ | async; as ctas) { @for(cta of ctas; track cta.id; let i =
     $index; let isOdd = $odd; let isEven = $even;) {
     <div class="ctas-container" [class.flip]="isEven">
       <div class="cta-left">
@@ -90,12 +96,15 @@ interface Cta {
     }}
   `,
 })
-export class CtasContentfulComponent {
+export class CtasContentfulComponent implements OnChanges {
   bank = input();
   _bank = linkedSignal(() => this.bank());
   error: any | undefined;
-  ctas$: Observable<any> | undefined;
   client: ContentfulClientApi<undefined>;
+
+  @Input() ctaContent!: any;
+  ctaContent$: Observable<any> | undefined;
+
   constructor() {
     this.client = createClient({
       space: environment.contentful.spaceId,
@@ -104,21 +113,26 @@ export class CtasContentfulComponent {
     });
   }
 
-  ngOnInit(): void {
-    this.ctas$ = from(
-      this.client
-        .getEntries<Entry<Cta>>(
-          Object.assign(
-            {
-              content_type: 'componentCta',
-            },
-            {}
+  ngOnChanges(): void {
+    if (this.ctaContent) {
+      console.log('ctaContent', this.ctaContent);
+      this.ctaContent$ = of(this.ctaContent);
+    } else {
+      this.ctaContent$ = from(
+        this.client
+          .getEntries<Entry<Cta>>(
+            Object.assign(
+              {
+                content_type: 'componentCta',
+              },
+              {}
+            )
           )
-        )
-        .then((response: EntryCollection<Entry<Cta>, undefined, string>) => {
-          console.log('response.items', response.items);
-          return response.items;
-        })
-    );
+          .then((response: EntryCollection<Entry<Cta>, undefined, string>) => {
+            console.log('response.items', response.items);
+            return response.items;
+          })
+      );
+    }
   }
 }
