@@ -51,7 +51,7 @@ export class AppContentfulComponent {
   }
 
   ngOnInit(): void {
-    console.log('bank', this._bank());
+    console.log('partner bank', this._bank());
 
     if (!this.bank()) {
       console.error('Bank ID is missing! Entry fetch will fail.');

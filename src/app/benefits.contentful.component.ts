@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ContentfulClientApi, createClient, EntryCollection } from 'contentful';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { environment } from '../environments';
 import { Entry } from './entitiy.contentful';
 
@@ -89,10 +89,13 @@ interface Benefit {
     </div>
   `,
 })
-export class BenefitsContentfulComponent {
+export class BenefitsContentfulComponent implements OnChanges {
   error: any | undefined;
   benefits$: Observable<any> | undefined;
   client: ContentfulClientApi<undefined>;
+
+  @Input() benefits!: any;
+
   constructor() {
     this.client = createClient({
       space: environment.contentful.spaceId,
@@ -101,23 +104,28 @@ export class BenefitsContentfulComponent {
     });
   }
 
-  ngOnInit(): void {
-    this.benefits$ = from(
-      this.client
-        .getEntries<Entry<Benefit>>(
-          Object.assign(
-            {
-              content_type: 'benefits',
-            },
-            {}
+  ngOnChanges(): void {
+    if (this.benefits) {
+      console.log('benefits', this.benefits);
+      this.benefits$ = of(this.benefits);
+    } else {
+      this.benefits$ = from(
+        this.client
+          .getEntries<Entry<Benefit>>(
+            Object.assign(
+              {
+                content_type: 'benefits',
+              },
+              {}
+            )
           )
-        )
-        .then(
-          (response: EntryCollection<Entry<Benefit>, undefined, string>) => {
-            console.log('response.items', response.items);
-            return response.items;
-          }
-        )
-    );
+          .then(
+            (response: EntryCollection<Entry<Benefit>, undefined, string>) => {
+              console.log('benefits response.items', response.items);
+              return response.items;
+            }
+          )
+      );
+    }
   }
 }

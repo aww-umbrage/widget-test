@@ -274,7 +274,9 @@
         [topSection]="partner()?.topSection"
       ></app-intro-contentful>
       <h2>Benefits</h2>
-      <app-benefits-contentful></app-benefits-contentful>
+      <app-benefits-contentful
+        [benefits]="partner()?.extraSection"
+      ></app-benefits-contentful>
       <app-ctas-contentful
         [bank]="_bank()"
         [ctaContent]="partner()?.body2"

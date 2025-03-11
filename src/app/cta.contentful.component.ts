@@ -129,7 +129,7 @@ export class CtasContentfulComponent implements OnChanges {
             )
           )
           .then((response: EntryCollection<Entry<Cta>, undefined, string>) => {
-            console.log('response.items', response.items);
+            console.log('cta response.items', response.items);
             return response.items;
           })
       );

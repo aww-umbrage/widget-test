@@ -117,7 +117,7 @@ export class IntroContentfulComponent implements OnChanges {
     if (this.topSection) {
       this.topSection$ = of(this.topSection[0]).pipe(
         switchMap((entry) => {
-          console.log('entries', entry);
+          console.log('top section', entry);
           const imageId = (entry.fields as any).image?.sys?.id;
 
           if (!imageId) {
@@ -125,10 +125,6 @@ export class IntroContentfulComponent implements OnChanges {
           }
           return from(this.client.getAsset(imageId)).pipe(
             map((asset) => {
-              console.log('asset', {
-                ...entry.fields,
-                imageUrl: `https:${asset.fields.file?.url}`,
-              });
               return {
                 ...entry.fields,
                 imageUrl: `https:${asset.fields.file?.url}`,
